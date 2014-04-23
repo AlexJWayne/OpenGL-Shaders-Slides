@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>reveal.js - The HTML Presentation Framework</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>OpenGL Shaders</h1>
+          <h2>Art = Math + Code</h2>
+          <iframe id="title-demo-shader"
+            data-src="https://www.shadertoy.com/embed/XslXRN?gui=false&paused=false"
+            style="width: 100%; height: 600px;"></iframe>
+
+
+          <p>
+            <small>Created by <a href="http://beautifulpixel.com">Alex Wayne</a></small>
+          </p>
+        </section>
+
+        <section>
+          <h2>Lysertron</h2>
+          <iframe width="900" height="600" frameborder="0" data-src="http://viz.lysertron.com/renderer?song=https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Flysertron%2Fcc-songs%2FNovaSiberia.mp3"></iframe>
+        </section>
+
+        <section>
+          <h2>Badass Examples</h2>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/lss3Df?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/ldl3W8?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/4dsGzH?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/lsX3W4?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/XdXGDS?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/Xs23WV?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/MdXGz4?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/XsXSRM?gui=false&paused=false"></iframe>
+          <iframe width="300" height="200" frameborder="0" data-src="https://www.shadertoy.com/embed/4dsGD7?gui=false&paused=false"></iframe>
+        </section>
+
+        <section>
+          <h2>Shaders are everywhere</h2>
+          <p>Every surface you see in all modern realtime 3D rendering.</p>
+          <img src="gameshot.jpg">
+          <ul>
+            <li>What glows?</li>
+            <li>What reflects light?</li>
+            <li>How shiny are different bits?</li>
+          </ul>
+        </section>
+
+        <section data-markdown>
+          # Why Shaders?
+
+          ## CPU vs GPU
+
+          ![fararri vs truck](cpu-gpu-compare.png)
+
+          Which is faster?
+        </section>
+
+        <section>
+          <h2>CPU</h2>
+          <img src="farrari.png" style="border: 0">
+          <h3>Linear</h3>
+          <p>Can do single things really fast, but limited to one thing at a time.</p>
+          <ol>
+            <li>Render pixel 1</li>
+            <li>Then render pixel 2</li>
+            <li>Then render pixel 3</li>
+            <li>etc...</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>GPU</h2>
+          <img src="truck.png" style="border: 0; height: 260px">
+          <h3>Parallel</h3>
+          <p>Can do single things more slowly, but can do the same operation on many things at once.</p>
+          <ol>
+            <li>Render pixels 1-48</li>
+            <li>Then render pixels 49-96</li>
+            <li>Then render pixels 97-144</li>
+            <li>etc...</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>CPU vs GPU</h2>
+          <p>So... which is faster, <em style="color: yellow">when you have a gigantic pile of pixels to move?</em></p>
+          <img src="cpu-gpu-compare.png" style="height: 200px">
+          <br>
+          <iframe width="300" height="300" frameborder="0" data-src="https://www.shadertoy.com/embed/4slXRN?gui=false&paused=false"></iframe>
+          &nbsp;
+          &nbsp;
+          <iframe width="300" height="300" frameborder="0" data-src="https://www.shadertoy.com/embed/XdsXRN?gui=false&paused=false"></iframe>
+          <ul>
+            <li>One 1080p video frame contains 2,073,600 pixels.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>GLSL</h2>
+          <h3>OpenGL Shading Language</h3>
+          <ul>
+            <li>Q: What color is <em>this</em> pixel? (for every pixel)</li>
+            <li>A: The color output of your GLSL script</li>
+          </ul>
+
+          <pre><code data-trim>
+// Paint the town red!
+void main() {
+  gl_FragColor = vec4(
+    1.0, // r: red
+    0.0, // g: green
+    0.0, // b: blue
+    1.0  // a: alpha/transparency
+  );
+}
+</code></pre>
+          <iframe width="300" height="300" frameborder="0" data-src="https://www.shadertoy.com/embed/4dsXRN?gui=false&paused=false"></iframe>
+
+
+        </section>
+
+        <section data-markdown>
+          # Tools
+
+          ## (Abridged...)
+
+          * Math Helpers
+          * Vectors
+          * Sine
+        </section>
+
+        <section>
+          <h2>Math Helpers</h2>
+          <h3>mod</h3>
+          <iframe width="600" height="100" frameborder="0" data-src="https://www.shadertoy.com/embed/MssXRN?gui=false&paused=false"></iframe>
+          <p>Returns remainder of division.</p>
+          <pre><code class="glsl" data-trim>
+float brightness = mod(position.x, 0.25) * 4.0;
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Math Helpers</h2>
+          <h3>abs</h3>
+          <iframe width="600" height="100" frameborder="0" data-src="https://www.shadertoy.com/embed/ldlSzN?gui=false&paused=false"></iframe>
+          <p>Always returns a positive number.</p>
+          <pre><code class="glsl" data-trim>
+float brightness = abs(position.x - 0.5) * 2.0;
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Math Helpers</h2>
+          <h3>smoothstep</h3>
+          <iframe width="600" height="100" frameborder="0" data-src="https://www.shadertoy.com/embed/MdlSzN?gui=false&paused=false"></iframe>
+          <p>Remap low and high point with a smooth curve.</p>
+          <pre><code class="glsl" data-trim>
+float brightness = smoothstep(0.4, 0.6, position.x);
+          </code></pre>
+        </section>
+
+        <section data-markdown>
+          ## Math Helpers
+
+          And many more...
+
+          * pow()
+          * log()
+          * clamp()
+          * floor() / ceil()
+          * min() / max()
+          * etc...
+        </section>
+
+        <section>
+          <h1>Vectors</h1>
+          <p>A set of related numbers that describe different dimensions of a single value.</p>
+
+          <table style="padding: 50px; width: 80%;">
+            <tr>
+              <th></th>
+              <th style="width: 150px">2D</th>
+              <th style="width: 150px">3D</th>
+              <th style="width: 150px">4D</th>
+            </tr>
+            <tr>
+              <th>Position: &nbsp;&nbsp;&nbsp;</th>
+              <td>x, y</td>
+              <td>x, y, z</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Velocity: &nbsp;&nbsp;&nbsp;</th>
+              <td>x, y</td>
+              <td>x, y, z</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Rotation: &nbsp;&nbsp;&nbsp;</th>
+              <td></td>
+              <td>roll, pitch, yaw</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Color: &nbsp;&nbsp;&nbsp;</th>
+              <td></td>
+              <td>r, g, b</td>
+              <td>r, g, b, a</td>
+            </tr>
+          </table>
+        </section>
+
+        <section>
+          <h2>Vector Math</h2>
+          <p>Add or substract vectors with each other.</p>
+
+          <pre><code class="glsl" data-trim>
+// If I throw a ball from a moving car,
+// whats the velcity of the ball?
+vec3 ballVel = carVel + throwVel;
+          </code></pre>
+
+          <p>Which is identical to:</p>
+
+          <pre><code class="glsl" data-trim>
+vec3 ballVel;
+ballVel.x = carVel.x + throwVel.x;
+ballVel.y = carVel.y + throwVel.y;
+ballVel.z = carVel.z + throwVel.z;
+            </pre></code>
+        </section>
+
+        <section>
+          <h2>Vector Math</h2>
+          <p>Same with colors.</p>
+
+          <pre><code class="glsl" data-trim>
+// yellow  = red + green
+vec3 color = vec3(1.0, 0.0, 0.0) + vec3(0.0, 1.0, 0.0);
+//                r    g    b           r    g    b
+          </code></pre>
+
+          <p>Which is identical to:</p>
+
+          <pre><code class="glsl" data-trim>
+vec3 color = vec3(1.0, 1.0, 0.0);
+//                r    g    b
+            </pre></code>
+        </section>
+
+        <section>
+          <h2>Vector Math</h2>
+          <p>Multiply or divide vector by numbers</p>
+
+          <pre><code class="glsl" data-trim>
+// My car is traveling three times faster than your car!
+vec3 myCarVel = yourCarVel * 3.0;
+          </code></pre>
+
+          <p>Which is identical to:</p>
+
+          <pre><code class="glsl" data-trim>
+vec3 myCarVel;
+myCarVel.x = yourCarVel.x * 3.0;
+myCarVel.y = yourCarVel.y * 3.0;
+myCarVel.z = yourCarVel.z * 3.0;
+          </code></pre>
+
+        </section>
+
+        <section>
+          <h2>Vector Math</h2>
+          <p>Multiply or divide vectors by other vectors</p>
+          <pre><code class="glsl" data-trim>
+// Train B is going westward twice as fast as train A,
+// but only half as fast northward.
+vec2 trainVelB = trainVelA * vec2(2.0, 0.5);
+          </code></pre>
+
+          <p>Which is identical to:</p>
+
+          <pre><code class="glsl" data-trim>
+vec2 trainVelB;
+trainVelB.x = trainVelA.x * 2.0;
+trainVelB.y = trainVelA.y * 0.5;
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Vector Math</h2>
+          <p>Make vectors out of other vectors</p>
+          <pre><code class="glsl" data-trim>
+// I have GPS location and altitude of my airplane.
+// So what's my position?
+vec3 airplanePosition = vec3(latLong, altitude);
+          </code></pre>
+
+          <p>Which is identical to:</p>
+
+          <pre><code class="glsl" data-trim>
+vec3 airplanePosition = vec3(latLong.x, latLong.y, altitude);
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Sine</h2>
+          <img src="http://i.stack.imgur.com/p8O4P.gif">
+        </section>
+
+        <section>
+          <h2>Sine</h2>
+          <p>Animate intensity</p>
+          <iframe width="600" height="100" frameborder="0" data-src="https://www.shadertoy.com/embed/lssXRN?gui=false&paused=false"></iframe>
+          <pre><code class="glsl" data-trim>
+float sinValue = sin(time);
+float brightness = sinValue * 0.5 + 0.5; // value is now from 0.0 to 1.0
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Sine</h2>
+          <p>Make curvy shapes</p>
+          <iframe width="600" height="100" frameborder="0" data-src="https://www.shadertoy.com/embed/MdsXRN?gui=false&paused=false"></iframe>
+          <pre><code class="glsl" data-trim>
+// a high frequency sine wave that slides with time
+float sinValue = sin(position.x * 20.0 - time);
+
+// sinValue is now from 0.0 to 1.0
+sinValue = sinValue * 0.5 + 0.5;
+
+// brightness is closeness to the wave
+float brightness = 1.0 - abs(sinValue - position.y);
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Sine</h2>
+          <p>Smooth motions</p>
+          <iframe width="600" height="100" frameborder="0" data-src="https://www.shadertoy.com/embed/ldsXRN?gui=false&paused=false"></iframe>
+          <pre><code class="glsl" data-trim>
+// threshold is based on sine time
+float threshold = sin(time);
+
+// threshold is now from 0.0 to 1.0
+threshold = threshold * 0.5 + 0.5;
+
+// paint light when the pixel is left of the threshold
+float brightness;
+if (position.x < threshold) {
+  brightness = 1.0; // light
+} else {
+  brightness = 0.0; // dark
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Anatomy of a Shader</h2>
+          <pre><code class="glsl" data-trim>
+// Uniforms from the outside.
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+
+// Custom functions.
+vec3 getColor() {
+  return vec3(1.0, 0.0, 0.0);
+}
+
+// Where it all starts.
+void main() {
+  vec3 color = getColor(); // do your stuff
+  gl_FragColor = vec4(color, 1.0); // <- the money
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Anatomy of a Shader</h2>
+          <h3>Uniforms</h3>
+          <pre><code class="glsl" data-trim>
+// These uniforms are what http://glsl.heroku.com/ decides to pass in.
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+          </code></pre>
+          <ul>
+            <li>Inputs that configure your shader</li>
+            <li>Passed from a controlling program</li>
+            <li>Constant for every pixel in one frame</li>
+            <li>Cannot be changed inside the shader</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Anatomy of a Shader</h2>
+          <h3>main()</h3>
+          <pre><code class="glsl" data-trim>
+void main() {
+  // shader code here
+}
+          </code></pre>
+          <p>When the shader begins to work on one pixel, it starts here.</p>
+        </section>
+
+        <section>
+          <h2>Anatomy of a Shader</h2>
+          <h3>gl_FragColor</h3>
+          <pre><code class="glsl" data-trim>
+void main() {
+  vec3 color = getColor();
+  gl_FragColor = vec4(color, 1.0); // This is why we're here
+  //                  rgb    a
+}
+          </code></pre>
+          <p>When your shader is done with it's pixel, this is its color.</p>
+          <p>Note it's a 4D vector, but for now alpha can always be 1.0.</p>
+        </section>
+
+        <section>
+          <h2>Anatomy of a Shader</h2>
+          <h3>Other functions</h3>
+          <pre><code class="glsl" data-trim>
+// A custom function that returns a variable shade of red
+vec3 getColor(float brightness) {
+  return vec3(1.0, 0.0, 0.0) * brightness;
+}
+
+void main() {
+  // call our function
+  gl_FragColor = vec4(getColor(0.5), 1.0);
+}
+          </code></pre>
+          <ul>
+            <li>Reuse complex logic</li>
+            <li>Keep things tidy</li>
+            <li>Must be above main()</li>
+          </ul>
+        </section>
+
+        <section data-markdown>
+          # Demo
+
+          * [Start](http://glsl.heroku.com/e#16209.1)
+          * [Target](http://glsl.heroku.com/e#16209.2)
+        </section>
+
+        <section>
+          <h2>Go play!</h2>
+          <p>
+            Open up <a href="http://glsl.heroku.com">glsl.heroku.com</a> and go to town.<br>
+            Some simple ideas to get you started:
+          </p>
+          <iframe width="250" height="250" frameborder="0" data-src="https://www.shadertoy.com/embed/MdXXRM?gui=false&paused=false"></iframe>
+          <iframe width="250" height="250" frameborder="0" data-src="https://www.shadertoy.com/embed/lsXXRM?gui=false&paused=false"></iframe>
+          <iframe width="250" height="250" frameborder="0" data-src="https://www.shadertoy.com/embed/MsXXRM?gui=false&paused=false"></iframe>
+        </section>
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+    <script>
+      // Prevent loading iframes until we need them.
+      var loadFramesOnDemand = function() {
+        var i;
+        var frame;
+        var dormantFrames = document.querySelectorAll("section.past iframe, section.future iframe");
+        for (i = 0; i < dormantFrames.length; i++) {
+          frame = dormantFrames[i];
+          if (!frame.dataset.src) {
+            frame.dataset.src = frame.src;
+            frame.src = 'about:blank'
+          }
+        }
+
+        var activeFrames = document.querySelectorAll("section.present iframe");
+        for (i = 0; i < activeFrames.length; i++) {
+          frame = activeFrames[i];
+
+          (function(frame, i) {
+            setTimeout(function() {
+              if (frame.dataset.src) {
+                frame.src = frame.dataset.src;
+                frame.dataset.src = '';
+              }
+            }, 500 + i * 500);
+          }(frame, i));
+
+        }
+      };
+
+      setTimeout(loadFramesOnDemand, 500);
+
+      Reveal.addEventListener('slidechanged', function(event) {
+        // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+        loadFramesOnDemand();
+      });
+    </script>
+
+  </body>
+</html>
