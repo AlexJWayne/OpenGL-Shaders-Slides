@@ -96,27 +96,25 @@
 
         <section>
           <h2>CPU</h2>
-          <img src="farrari.png" style="border: 0">
-          <h3>Linear</h3>
-          <p>Can do single things really fast, but limited to one thing at a time.</p>
-          <ol>
-            <li>Render pixel 1</li>
-            <li>Then render pixel 2</li>
-            <li>Then render pixel 3</li>
-            <li>etc...</li>
+          <p>
+            <img src="farrari.png" style="border: 0">
+          </p>
+          <ul>
+            <li>Linear / Sequential</li>
+            <li>Generalized / Flexible</li>
+            <li>Optimized for logic</li>
           </ul>
         </section>
 
         <section>
           <h2>GPU</h2>
-          <img src="truck.png" style="border: 0; height: 260px">
-          <h3>Parallel</h3>
-          <p>Can do single things more slowly, but can do the same operation on many things at once.</p>
-          <ol>
-            <li>Render pixels 1-48</li>
-            <li>Then render pixels 49-96</li>
-            <li>Then render pixels 97-144</li>
-            <li>etc...</li>
+          <p>
+            <img src="truck.png" style="border: 0; height: 260px">
+          </p>
+          <ul>
+            <li>Parallel / Simultaneous</li>
+            <li>Specialized / Restricted</li>
+            <li>Optimized for math</li>
           </ul>
         </section>
 
@@ -223,7 +221,13 @@ float brightness = smoothstep(0.4, 0.6, position.x);
               <th style="width: 150px">4D</th>
             </tr>
             <tr>
-              <th>Position: &nbsp;&nbsp;&nbsp;</th>
+              <th style="color: yellow">Color: &nbsp;&nbsp;&nbsp;</th>
+              <td></td>
+              <td>r, g, b</td>
+              <td>r, g, b, a</td>
+            </tr>
+            <tr>
+              <th style="color: yellow">Position: &nbsp;&nbsp;&nbsp;</th>
               <td>x, y</td>
               <td>x, y, z</td>
               <td></td>
@@ -235,16 +239,16 @@ float brightness = smoothstep(0.4, 0.6, position.x);
               <td></td>
             </tr>
             <tr>
-              <th>Rotation: &nbsp;&nbsp;&nbsp;</th>
-              <td></td>
-              <td>roll, pitch, yaw</td>
+              <th>Size: &nbsp;&nbsp;&nbsp;</th>
+              <td>w, h</td>
+              <td>w, h, d</td>
               <td></td>
             </tr>
             <tr>
-              <th>Color: &nbsp;&nbsp;&nbsp;</th>
+              <th>Rotation: &nbsp;&nbsp;&nbsp;</th>
               <td></td>
-              <td>r, g, b</td>
-              <td>r, g, b, a</td>
+              <td><small>roll, pitch, yaw</small></td>
+              <td></td>
             </tr>
           </table>
         </section>
